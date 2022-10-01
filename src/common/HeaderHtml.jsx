@@ -1,4 +1,11 @@
-import React, { useState } from "react";
+import React, {
+  useState,
+  useRef,
+  memo,
+  useCallback,
+  useDeferredValue,
+  useMemo,
+} from "react";
 import styled from "@emotion/styled";
 import { AiOutlineSearch } from "react-icons/ai";
 import logo from "./와챠.png";
@@ -13,8 +20,10 @@ import Google from "./google.png";
 import LanguageIcon from "@mui/icons-material/Language";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import CloseIcon from "@mui/icons-material/Close";
+import axios from "axios";
+import { useEffect } from "react";
 
-export default function HeaderHtml() {
+function HeaderHtml() {
   const Base = styled.header`
     position: fixed;
     top: 0;
@@ -365,6 +374,42 @@ export default function HeaderHtml() {
   };
   const handlePasswordClose = () => setPassword(false);
 
+  // const [inputUsername, setInputUsername] = useState(null);
+  // const [inputPassword, setInputPassword] = useState(null);
+  // const [inputEmail, setInputEmail] = useState(null);
+
+  // const onChangeUsername = memo((e) => {
+  //   setInputUsername(e.target.value);
+  // });
+
+  // const onChangePassword = (e) => {
+  //   setInputPassword(e.target.value);
+  // };
+
+  // const onChangeEmail = (e) => {
+  //   setInputEmail(e.target.value);
+  // };
+  const inputUsername = useRef("");
+  const inputPassword = useRef("");
+  const inputEmail = useRef("");
+
+  const onChange = (e, input) => {
+    const value = e.target.value;
+    input.current = value;
+  };
+
+  const saveHandler = async (e) => {
+    e.preventDefault();
+    const value = {
+      username: inputUsername.current,
+      password: inputPassword.current,
+      email: inputEmail.current,
+    };
+    await axios.post("/api/users", value).then((res) => {
+      console.log(res);
+    });
+  };
+
   return (
     <Base>
       <Navigation>
@@ -539,23 +584,40 @@ export default function HeaderHtml() {
                 <SignUpPaper>
                   <SignUpImg src={logo}></SignUpImg>
                   <SignUpText>회원가입</SignUpText>
-                  <LoginLabel>
-                    <LoginInput placeholder="이름"></LoginInput>
-                  </LoginLabel>
-                  <LoginLabel>
-                    <LoginInput placeholder="이메일"></LoginInput>
-                  </LoginLabel>
-                  <LoginLabel>
-                    <LoginInput placeholder="비밀번호"></LoginInput>
-                  </LoginLabel>
-                  <LanguageContainer>
-                    <LanguageIcon />
-                    <LanguageText> 한국어 (대한민국) </LanguageText>
-                    <ArrowDropDownIcon />
-                  </LanguageContainer>
-                  <LoginButton>
-                    <LoginText>회원가입</LoginText>
-                  </LoginButton>
+                  <SearchForm onSubmit={saveHandler}>
+                    <LoginLabel>
+                      <LoginInput
+                        placeholder="이름"
+                        // value={inputUsername}
+                        // onChange={onChangeUsername}
+                        onChange={(e) => onChange(e, inputUsername)}
+                      ></LoginInput>
+                    </LoginLabel>
+                    <LoginLabel>
+                      <LoginInput
+                        placeholder="이메일"
+                        // value={inputEmail}
+                        // onChange={onChangeEmail}
+                        onChange={(e) => onChange(e, inputEmail)}
+                      ></LoginInput>
+                    </LoginLabel>
+                    <LoginLabel>
+                      <LoginInput
+                        placeholder="비밀번호"
+                        // value={inputPassword}
+                        // onChange={onChangePassword}
+                        onChange={(e) => onChange(e, inputPassword)}
+                      ></LoginInput>
+                    </LoginLabel>
+                    <LanguageContainer>
+                      <LanguageIcon />
+                      <LanguageText> 한국어 (대한민국) </LanguageText>
+                      <ArrowDropDownIcon />
+                    </LanguageContainer>
+                    <LoginButton type="submit">
+                      <LoginText>회원가입</LoginText>
+                    </LoginButton>
+                  </SearchForm>
                   <TextContainer>
                     <GrayText>이미 가입하셨나요? </GrayText>
                     <ColorText onClick={handleSignInOpen}>로그인</ColorText>
@@ -602,3 +664,5 @@ export default function HeaderHtml() {
     </Base>
   );
 }
+
+export default memo(HeaderHtml);
