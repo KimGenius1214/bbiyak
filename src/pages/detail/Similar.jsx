@@ -1,20 +1,21 @@
 import React from "react";
 import styled from "@emotion/styled";
+import useSimilarMovie from "./useSimilarMovie";
 
 const Base = styled.section`
   padding: 11px 15px;
   border-bottom: 1px solid #ededed;
 `;
 
-const HeaderWrapper = styled.div``;
+const ContentHeaderWrapper = styled.div``;
 
-const Header = styled.header`
+const ContentHeader = styled.header`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 `;
 
-const Title = styled.h2`
+const ContentTitle = styled.h2`
   color: #000;
   font-size: 19px;
   font-weight: 700;
@@ -23,13 +24,9 @@ const Title = styled.h2`
 
 const ContentsWrapper = styled.div`
   display: grid;
-  grid-template-columes: repeat(5, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   margin-top: 15px;
   row-gap: 24px;
-`;
-
-const Link = styled.a`
-  text-decoration: none;
 `;
 
 const CardContainer = styled.div`
@@ -54,7 +51,7 @@ const Info = styled.div`
   margin: 5px 10px 0px 0px;
 `;
 
-const CardTitle = styled.div`
+const Title = styled.div`
   color: rgb(41, 42, 50);
   font-size: 16px;
   font-weight: 500;
@@ -65,7 +62,7 @@ const CardTitle = styled.div`
 `;
 
 const VoteAverage = styled.div`
-  marign-top: 2px;
+  margin-top: 2px;
   color: rgb(120, 120, 120);
   font-size: 13px;
   font-weight: 400;
@@ -75,32 +72,48 @@ const VoteAverage = styled.div`
   text-overflow: ellipsis;
 `;
 
-const SimilarMovie = () => {
+const Link = styled.a`
+  text-decoration: none;
+`;
+
+const Card = ({ id, posterPath, title, voteAverage }) => {
   return (
-    <Link href="/movie/123">
+    <Link href={`/movie/${id}`} target="_blank">
       <CardContainer>
         <PosterWrapper>
-          <Poster src="https://an2-img.amz.wtchn.net/image/v2/zfOomKaxhsduTHnbrvYNtg.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk5Ea3dlRGN3TUhFNE1DSmRMQ0p3SWpvaUwzWXlMM04wYjNKbEwybHRZV2RsTHpFMk5qRTRNemt5TnpZNE9USXpOemszTVRZaWZRLnhwaW1uaUo3TmtudWw4Ym5McGNCVjRKSkpSdDUyTUZ1enItTlN5d0RtTHM" />
+          <Poster src={`https://image.tmdb.org/t/p/w300/${posterPath}`} />
         </PosterWrapper>
         <Info>
-          <CardTitle>제목</CardTitle>
-          <VoteAverage>평점</VoteAverage>
+          <Title>{title}</Title>
+          <VoteAverage>평균 ★ {voteAverage}</VoteAverage>
         </Info>
       </CardContainer>
     </Link>
   );
 };
 
-export default function Similar() {
+export default function Similar({ id }) {
+  const { isLoading, data } = useSimilarMovie(id);
   return (
     <Base>
-      <HeaderWrapper>
-        <Header>
-          <Title>비슷한 작품</Title>
-        </Header>
-      </HeaderWrapper>
+      <ContentHeaderWrapper>
+        <ContentHeader>
+          <ContentTitle>비슷한 작품</ContentTitle>
+        </ContentHeader>
+      </ContentHeaderWrapper>
       <ContentsWrapper>
-        <SimilarMovie />
+        {isLoading || !data ? (
+          <div>Loading...</div>
+        ) : (
+          data?.data.results.map((result) => (
+            <Card
+              id={result.id}
+              posterPath={result.poster_path}
+              title={result.title}
+              voteAverage={result.vote_average}
+            />
+          ))
+        )}
       </ContentsWrapper>
     </Base>
   );

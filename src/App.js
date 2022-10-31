@@ -2,11 +2,13 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import MovieDetail from "./pages/MovieDetail";
 import HeaderHtml from "./common/HeaderHtml";
+import LatestMovieSection from "./features/movie/latest";
+import MainPage from "./pages/MainPage";
 
 function App() {
   return (
     <Routes>
-      <Route exact path="/" element={<HeaderHtml />}></Route>
+      <Route exact path="/" element={<MainPage />}></Route>
       <Route path="/movie/:id" element={<MovieDetail />}></Route>
       {/* <Route path="/event" element={<Event />}></Route>
       <Route path="/event/:id" element={<EventDetail />}></Route>

@@ -1,14 +1,14 @@
 import React from "react";
 import styled from "@emotion/styled";
 
-const Base = styled.div`
+const ContentSection = styled.section`
   padding: 11px 15px;
   border-bottom: 1px solid #ededed;
 `;
 
-const HeaderWrapper = styled.div``;
+const ContentHeaderWrapper = styled.div``;
 
-const Header = styled.header`
+const ContentHeader = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -19,7 +19,7 @@ const Link = styled.a`
   color: #ff2f6e;
 `;
 
-const Title = styled.h2`
+const ContentTitle = styled.h2`
   color: #000;
   font-size: 19px;
   font-weight: 700;
@@ -35,27 +35,35 @@ const Summary = styled.div`
 
 const MoreSee = styled.div``;
 
-export default function DefaultInfo() {
+export default function DefaultInfo({
+  title,
+  year,
+  genres,
+  runtime,
+  overview,
+}) {
+  const hour = Math.ceil(runtime / 60);
+  const minute = runtime % 60;
   return (
-    <Base>
-      <HeaderWrapper>
-        <Header>
-          <Title></Title>
+    <ContentSection>
+      <ContentHeaderWrapper>
+        <ContentHeader>
+          <ContentTitle>기본 정보</ContentTitle>
           <Link href="/overview">
             <MoreSee>더보기</MoreSee>
           </Link>
-        </Header>
+        </ContentHeader>
         <Summary>
-          제목
+          {title}
           <br />
-          연도 , 장르
+          {year} ・ {genres}
           <br />
-          0 시간 0 분
+          {hour}시간 {minute}분
           <br />
           <br />
-          줄거리...
+          {overview}
         </Summary>
-      </HeaderWrapper>
-    </Base>
+      </ContentHeaderWrapper>
+    </ContentSection>
   );
 }

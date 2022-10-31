@@ -1,15 +1,31 @@
 import React from "react";
-import ReactSlick, { Settings } from "react-slick";
+import ReactSlick from "react-slick";
 import styled from "@emotion/styled";
-import { MdArrowBackIos, MdArrowforwardIos } from "react-icons/md";
+import {
+  MdOutlineArrowBackIosNew,
+  MdOutlineArrowForwardIos,
+} from "react-icons/md";
+import { css } from "@emotion/react";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const ArrowButton = styled.button`
   padding: 16px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
   border-radius: 50%;
   z-index: 1;
   top: 50%;
   background-color: #fff;
+  ${({ pos }) =>
+    pos === "left"
+      ? css`
+          left: 0;
+          transform: translate(-50%, 50%);
+        `
+      : css`
+          right: 0;
+          transform: translate(50%, -50%);
+        `};
   &:before {
     content: initial;
   }
@@ -24,27 +40,27 @@ const ArrowButton = styled.button`
   }
 `;
 
-const DEFAULT_SETTINGS = {
-  dots: false,
-  arrow: true,
-  infinite: false,
-  speed: 500,
-  slidesToShow: 5,
-  slidesToScroll: 5,
-  swipe: true,
-  draggable: true,
-  prevArrow: (
-    <ArrowButton>
-      <MdArrowBackIos></MdArrowBackIos>
-    </ArrowButton>
-  ),
-  nextArrow: (
-    <ArrowButton>
-      <MdArrowforwardIos></MdArrowforwardIos>
-    </ArrowButton>
-  ),
-};
-
-export default function Slider({ settings = DEFAULT_SETTINGS }, children) {
+export default function Slider({ children }) {
+  const settings = {
+    dots: false,
+    arrows: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 5,
+    slidesToScroll: 5,
+    swipe: true,
+    autoplay: true,
+    draggable: true,
+    prevArrow: (
+      <ArrowButton pos="left">
+        <MdOutlineArrowBackIosNew></MdOutlineArrowBackIosNew>
+      </ArrowButton>
+    ),
+    nextArrow: (
+      <ArrowButton pos="right">
+        <MdOutlineArrowForwardIos></MdOutlineArrowForwardIos>
+      </ArrowButton>
+    ),
+  };
   return <ReactSlick {...settings}>{children}</ReactSlick>;
 }
