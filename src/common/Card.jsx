@@ -23,7 +23,7 @@ const ImageWrapper = styled.div`
 const Image = styled.img`
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 4px;
 `;
 
@@ -69,7 +69,7 @@ export default function Card({
   year,
 }) {
   return (
-    <StyledLink src={linkUrl}>
+    <StyledLink href={linkUrl}>
       <Base>
         <ImageWrapper>
           <Image src={posterPath} alt={`${title}의 포스터`} />

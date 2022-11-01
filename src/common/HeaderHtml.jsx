@@ -22,6 +22,8 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { useEffect } from "react";
+import useMovieSearch from "../pages/detail/useMovieSearch";
+import useOnClickOutside from "../pages/useClickOutside";
 
 function HeaderHtml() {
   const Base = styled.header`
@@ -170,7 +172,7 @@ function HeaderHtml() {
     overflow-y: scroll;
   `;
 
-  const SerachResultListItem = styled.li`
+  const SearchResultListItem = styled.li`
     padding: 4px 6px;
     box-sizing: border-box;
     color: #222;
@@ -353,7 +355,6 @@ function HeaderHtml() {
     background-color: lightgray;
   `;
 
-  const handleKeyword = () => {};
   const [signIn, setSignIn] = useState(false);
   const handleSignInOpen = () => {
     setSignIn(true);
@@ -392,6 +393,7 @@ function HeaderHtml() {
   const inputUsername = useRef("");
   const inputPassword = useRef("");
   const inputEmail = useRef("");
+  const searchRef = useRef("");
 
   const onChange = (e, input) => {
     const value = e.target.value;
@@ -409,6 +411,12 @@ function HeaderHtml() {
       console.log(res);
     });
   };
+
+  // useOnClickOutside(searchRef, () => setSearchKeyword(""));
+
+  const data = useMovieSearch(searchRef.current);
+
+  console.log(data);
 
   return (
     <Base>
@@ -446,14 +454,26 @@ function HeaderHtml() {
                       <AiOutlineSearch></AiOutlineSearch>
                       <SearchInput
                         placeholder="콘텐츠, 인물, 컬렉션, 유저를 검색해보세요."
-                        onChange={handleKeyword}
+                        onChange={(e) => onChange(e, searchRef)}
                       />
                     </SearchLabel>
                   </SearchForm>
                 </SearchformWrapper>
               </SearchCotainer>
               <SearchResultWrapper>
-                <SearchResultList>{}</SearchResultList>
+                <SearchResultList>
+                  {data.data &&
+                    data?.data.results.map((searchResultItem) => (
+                      <Link
+                        href={`/movie/${searchResultItem.id}`}
+                        key={searchResultItem.id}
+                      >
+                        <SearchResultListItem>
+                          {searchResultItem.title}
+                        </SearchResultListItem>
+                      </Link>
+                    ))}
+                </SearchResultList>
               </SearchResultWrapper>
             </SearchMenu>
             <Menu>

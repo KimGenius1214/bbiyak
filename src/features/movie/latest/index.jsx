@@ -18,7 +18,6 @@ export default function LatestMovieSection() {
   const { data, isLoading } = useLatestMovie();
 
   const getYear = (date) => date.split("-")[0];
-  console.log(data);
 
   return (
     <div>
@@ -28,7 +27,6 @@ export default function LatestMovieSection() {
           <div>Loading...</div>
         ) : (
           <Card
-            src={`/movie/${data.data.id}`}
             key={data.data.id}
             linkUrl={`/movie/${data.data.id}`}
             title={data.data.title}

@@ -37,6 +37,7 @@ export default function TopRateMovieSection() {
                   posterPath={`https://image.tmdb.org/t/p/w300/${movie.poster_path}`}
                   voteAverage={movie.vote_average}
                   year={getYear(movie.release_date)}
+                  linkUrl={`/movie/${movie.id}`}
                 />
               ))}
           </Slider>

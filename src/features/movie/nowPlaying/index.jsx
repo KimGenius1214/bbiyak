@@ -31,11 +31,11 @@ export default function NowPlayingMovieSection() {
             {data &&
               data.data.results.map((movie) => (
                 <Card
-                  src={`/movie/${movie.id}`}
                   title={movie.title}
                   posterPath={`https://image.tmdb.org/t/p/w300/${movie.poster_path}`}
                   voteAverage={movie.vote_average}
                   year={getYear(movie.release_date)}
+                  linkUrl={`/movie/${movie.id}`}
                 />
               ))}
           </Slider>
