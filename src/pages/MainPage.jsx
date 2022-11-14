@@ -24,7 +24,7 @@ export default function MainPage() {
       <HeaderHtml />
       <Main>
         <Container>
-          <LatestMovieSection />
+          {/* <LatestMovieSection /> */}
           <NowPlayingSection />
           <PopularMovieSection />
           <TopRateMovieSection />

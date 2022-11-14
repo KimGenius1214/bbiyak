@@ -24,6 +24,8 @@ import axios from "axios";
 import { useEffect } from "react";
 import useMovieSearch from "../pages/detail/useMovieSearch";
 import useOnClickOutside from "../pages/useClickOutside";
+import SearchInput from "./SearchInput";
+import SearchMenu from "./SearchMenu";
 
 function HeaderHtml() {
   const Base = styled.header`
@@ -73,15 +75,15 @@ function HeaderHtml() {
     vertical-align: top;
   `;
 
-  const SearchMenu = styled.li`
-    width: 300px;
-    display: flex;
-    align-items: cneter;
-    height: 62px;
-    flex-shrink: 1;
-    margin: 0 0 0 auto;
-    position: relative;
-  `;
+  // const SearchMenu = styled.li`
+  //   width: 300px;
+  //   display: flex;
+  //   align-items: cneter;
+  //   height: 62px;
+  //   flex-shrink: 1;
+  //   margin: 0 0 0 auto;
+  //   position: relative;
+  // `;
 
   const Link = styled.a`
     text-decoration: none;
@@ -98,12 +100,49 @@ function HeaderHtml() {
     }
   `;
 
-  const SearchCotainer = styled.div`
+  const SearchContainer = styled.div`
     position: relative;
     width: 100%;
   `;
 
-  const SearchformWrapper = styled.div``;
+  const SearchResultWrapper = styled.div`
+    position: absolute;
+    top: 60px;
+    left: 0;
+    z-index: 9999999;
+    background-color: #fff;
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
+    max-height: 480px;
+    overflow-y: scroll;
+  `;
+
+  const SearchResultListItem = styled.li`
+    padding: 4px 6px;
+    box-sizing: border-box;
+    color: #222;
+    font-size: 16px;
+    width: 100%;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    &:hover {
+      background-color: #eee;
+    }
+  `;
+
+  const SearchResultList = styled.ul`
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  `;
+
+  const SearchFormWrapper = styled.div``;
 
   const SearchForm = styled.form``;
 
@@ -116,24 +155,20 @@ function HeaderHtml() {
     height: 38px;
     border-radius: 2px;
     padding: 7px 8px;
-    margin-top: 15px;
   `;
 
-  const SearchInput = styled.input`
-  font-size: 15px;
-  font-weight: 400;
-  background: transparent;
-  width: 100%
-  padding: 0 0 0 0px;
-  border: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  caret-color: rgb(53, 53, 53);
-  line-height: 23px;
-  &:focus {
-    outline: none;
-  }
-  `;
+  // const SearchInput = styled.input`
+  //   font-size: 14px;
+  //   font-weight: 400;
+  //   background: transparent;
+  //   width: 100%;
+  //   padding: 0 0 0 8px;
+  //   border: 0;
+  //   overflow: hidden;
+  //   text-overflow: ellipsis;
+  //   caret-color: rgb(53, 53, 53);
+  //   line-height: 23px;
+  // `;
 
   const SignIn = styled.button`
     background: transparent;
@@ -157,42 +192,6 @@ function HeaderHtml() {
     border: 1px solid rgba(116, 116, 123, 0.5);
     cursor: pointer;
     maring: 15px 0;
-  `;
-
-  const SearchResultWrapper = styled.div`
-    position: absolute;
-    top: 60px;
-    left: 0;
-    z-index: 999;
-    background: #fff;
-    width: 100%;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
-    max-height: 480px;
-    overflow-y: scroll;
-  `;
-
-  const SearchResultListItem = styled.li`
-    padding: 4px 6px;
-    box-sizing: border-box;
-    color: #222;
-    font-size: 16px;
-    width: 100%;
-    height: 25px;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    &:hover {
-      background: #eee;
-    }
-  `;
-
-  const SearchResultList = styled.ul`
-    list-style: none;
-    marign: 0;
-    padding: 0;
   `;
 
   const SignUpPaper = styled.div`
@@ -394,6 +393,7 @@ function HeaderHtml() {
   const inputPassword = useRef("");
   const inputEmail = useRef("");
   const searchRef = useRef("");
+  const [searchKeyword, setSearchKeyword] = useState("");
 
   const onChange = (e, input) => {
     const value = e.target.value;
@@ -411,12 +411,38 @@ function HeaderHtml() {
       console.log(res);
     });
   };
+  const handleKeyword = (e) => {
+    setSearchKeyword(e.target.value);
+  };
 
-  // useOnClickOutside(searchRef, () => setSearchKeyword(""));
-
-  const data = useMovieSearch(searchRef.current);
+  const data = useMovieSearch(searchKeyword);
 
   console.log(data);
+
+  // const onHandleCreate = useCallback(
+  //   (e) => {
+  //     setSearchKeyword(e.target.value);
+  //     console.log(searchKeyword);
+  //   },
+  //   [searchKeyword]
+  // );
+
+  const onHandleCreate = (data) => {
+    console.log(data);
+  };
+
+  const childInputValue = useRef();
+
+  // useOnClickOutside(searchRef, () => setSearchKeyword(""));
+  const [option, setOption] = useState("옵션1");
+
+  const onChangeOption = useCallback(
+    (e) => {
+      setOption(e.target.value);
+      console.log(option);
+    },
+    [option]
+  );
 
   return (
     <Base>
@@ -447,23 +473,22 @@ function HeaderHtml() {
               </Link>
             </Menu>
             <SearchMenu>
-              <SearchCotainer>
-                <SearchformWrapper>
+              <SearchContainer>
+                <SearchFormWrapper ref={searchRef}>
                   <SearchForm>
                     <SearchLabel>
-                      <AiOutlineSearch></AiOutlineSearch>
+                      <AiOutlineSearch />
                       <SearchInput
-                        placeholder="콘텐츠, 인물, 컬렉션, 유저를 검색해보세요."
-                        onChange={(e) => onChange(e, searchRef)}
-                      />
+                        handleCreate={setSearchKeyword}
+                      ></SearchInput>
                     </SearchLabel>
                   </SearchForm>
-                </SearchformWrapper>
-              </SearchCotainer>
+                </SearchFormWrapper>
+              </SearchContainer>
               <SearchResultWrapper>
                 <SearchResultList>
                   {data.data &&
-                    data?.data.results.map((searchResultItem) => (
+                    data?.data?.results?.map((searchResultItem) => (
                       <Link
                         href={`/movie/${searchResultItem.id}`}
                         key={searchResultItem.id}
@@ -476,6 +501,10 @@ function HeaderHtml() {
                 </SearchResultList>
               </SearchResultWrapper>
             </SearchMenu>
+            {/* <SearchMenu
+              onChange={(e) => handleKeyword(e)}
+              value={searchKeyword}
+            ></SearchMenu> */}
             <Menu>
               <SignIn onClick={handleSignInOpen}>로그인</SignIn>
               <Modal
