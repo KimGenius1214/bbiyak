@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import HeaderHtml from "../common/HeaderHtml";
 import Footer from "../common/Footer";
 import styled from "@emotion/styled";
 import pattern from "../images/pattern.jpg";
 import user from "../images/user.png";
 import setttings from "../images/settings.png";
-
+import SettingModal from "../common/SettingModal";
 const Main = styled.main`
   margin: 10px auto;
   background-color: #f5f5f5;
@@ -121,18 +121,28 @@ const PaperBottom = styled.div`
 const Link = styled.a``;
 
 export default function MyPage() {
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
   return (
     <div>
       <HeaderHtml />
+      <SettingModal open={modalOpen} close={closeModal} header="Modal heading">
+        함수형 모달 팝업창입니다. 쉽게 만들 수 있어요. 같이 만들어봐요!
+      </SettingModal>
       <Main>
         <Container>
           <PaperContainer>
             <HeadContent src={pattern} alt="wallpaper"></HeadContent>
-
             <Link href={"#"}>
-              <SettingIcon src={setttings}></SettingIcon>
+              <SettingIcon src={setttings} onClick={openModal}></SettingIcon>
             </Link>
-
             <Profile src={user} />
             <NickName>지니어스</NickName>
             <ProfileText>프로필이 없습니다</ProfileText>
